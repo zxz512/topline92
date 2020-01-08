@@ -1,0 +1,79 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "552308",
+      "name": "shouji",
+      "font_class": "iconfontshouji",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "689285",
+      "name": "设置 设定 配置 齿轮",
+      "font_class": "shezhishedingpeizhichilun",
+      "unicode": "e80f",
+      "unicode_decimal": 59407
+    },
+    {
+      "icon_id": "721702",
+      "name": "设置",
+      "font_class": "ai-set",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1758589",
+      "name": "验证码",
+      "font_class": "yanzhengma",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "3716181",
+      "name": "手机",
+      "font_class": "shouji",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "3718821",
+      "name": "福 (22)",
+      "font_class": "fu",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "7419508",
+      "name": "菜单",
+      "font_class": "candan",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "8940016",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "9512671",
+      "name": "验证码",
+      "font_class": "verify-fill",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "10582821",
+      "name": "文章管理",
+      "font_class": "wenzhangguanli",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    }
+  ]
+}

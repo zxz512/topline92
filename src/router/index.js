@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '@/views/login'
 import Home from '@/views/home'
+import Welcome from '@/views/welcome'
+import Article from '@/views/article'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -9,7 +11,15 @@ const routes = [{
   name: 'login',
   component: Login
 },
-{ path: '/home', name: 'home', component: Home }
+{ path: '/home',
+  name: 'home',
+  component: Home,
+  redirect: '/welcome', // 路由重定向
+  children: [
+  // 欢迎页面子路由配置
+    { path: '/welcome', name: 'welcome', component: Welcome },
+    { path: '/article', name: 'article', component: Article }
+  ] }
 
 ]
 
