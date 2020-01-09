@@ -10,6 +10,7 @@ import '@/assets/css/global.css'
 // 导入axios模块
 import axios from 'axios'
 // 配置公共根地址(线上地址)
+import '@/utils/ax.js'
 
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/'
 // 配置为Vue的(原型)继承成员
