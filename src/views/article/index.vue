@@ -6,7 +6,7 @@
       </div>
       <!-- 绘制form表单相关 -->
       <!-- search:寻找  searchForm: 数据检索的表单数据对象成员 -->
-      <el-form ref="searchFormRef" :model="searchForm" label-width="100px" >
+      <el-form ref="searchFormRef" :model="searchForm" label-width="100px">
         <el-form-item label="文章状态：">
           <el-radio v-model="searchForm.status" label>全部</el-radio>
           <el-radio v-model="searchForm.status" :label=" 0 ">草稿</el-radio>
@@ -15,14 +15,7 @@
           <el-radio v-model="searchForm.status" :label=" 3 ">审核失败</el-radio>
         </el-form-item>
         <el-form-item label="频道列表：">
-          <el-select v-model="searchForm.channel_id" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in channelList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <channel @slt="selectHandler"></channel>
         </el-form-item>
         <el-form-item label="时间选择：">
           <el-date-picker
@@ -41,7 +34,7 @@
         <span>共找到{{tot}}条符合条件的内容</span>
       </div>
       <el-table :data="articleList" style="width: 100%" border>
-        <el-table-column prop="cover.images[0]" label="图标">
+        <el-table-column label="图标">
           <!-- 体现img图片标签效果 -->
           <!-- 想方设法把“当前的文章对象数据记录”获得到，进而获得对应的 cover.images[0]，以用于img标签显示使用
               数据通过“作用域插槽”体现的，名称为"row"
@@ -63,7 +56,7 @@
           <template slot-scope="stData">
             <el-tag v-if="stData.row.status===0">草稿</el-tag>
             <el-tag v-else-if="stData.row.status===1" type="success">待审核</el-tag>
-            <el-tag v-else-if="stData.row.status===2" type="info" >审核通过</el-tag>
+            <el-tag v-else-if="stData.row.status===2" type="info">审核通过</el-tag>
             <el-tag v-else-if="stData.row.status===3" type="warning">审核失败</el-tag>
           </template>
         </el-table-column>
@@ -71,8 +64,15 @@
         <el-table-column prop="pubdate" label="发布时间"></el-table-column>
         <!-- 修改、删除不属于数据部分，只是普通的按钮，那么可以不用设置prop，对应的内容可以通过el-table-column的标签“内容区域”体现 -->
         <el-table-column label="操作">
-          <el-button type="primary" size="mini" icon="el-icon-edit">修改</el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+          <template slot-scope="stData">
+            <el-button
+              type="primary"
+              size="mini"
+              icon="el-icon-edit"
+              @click="$router.push('/articleedit/'+stData.row.id)"
+              >修改</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="del(stData.row.id)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
 
@@ -86,7 +86,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="tot"
       ></el-pagination>
-        <!-- <el-pagination
+      <!-- <el-pagination
         @size-change="handleSizeChange" // 事件，每页条数变化的回调处理
         @current-change="handleCurrentChange" // 事件，当前页码变化的回调处理
         :current-page="currentPage4" // 属性绑定，默认当前页码，默认第1页
@@ -94,16 +94,20 @@
         :page-size="100"  // 属性绑定，设置默认每页显示条数的
         layout="total, sizes, prev, pager, next, jumper" // 分页布局元素构成
         :total="400" // 属性绑定，设置记录总条数
-      ></el-pagination> -->
+      ></el-pagination>-->
     </el-card>
   </div>
 </template>
 
 <script>
+import Channel from '@/components/channel.vue'
+
 export default {
   // 每个组件都要设置一个唯一属性值的name属性，好处：在devtools里边方便寻找当前的组件
   name: 'Article',
-
+  components: {
+    Channel
+  },
   // 监听器设置
   watch: {
     // 对searchForm做深度监听
@@ -112,6 +116,7 @@ export default {
         // console.log(newV)
         // 根据变化后的各个筛选条件，重新获得文章列表
         this.getArticleList()
+        this.searchForm.page = 1
       },
       deep: true
     },
@@ -138,7 +143,7 @@ export default {
     return {
       articleList: [], // 文章列表
       tot: 0, // 文章总条数
-      channelList: [], // 频道列表
+
       timetotime: '', // 时间范围临时接收成员
       // 检索表单数据对象
       searchForm: {
@@ -152,12 +157,44 @@ export default {
     }
   },
   created () {
-    // 获得频道
-    this.getChannelList()
     // 获得文章
     this.getArticleList()
   },
   methods: {
+    // 声明事件方法，用于接收子组件channel传递过来的频道id
+    // id:频道子组件传递过来的选中的频道id
+    selectHandler (id) {
+      // 把id赋值给addForm.channel_id
+      this.searchForm.channel_id = id
+    },
+
+    // 删除文章
+    del (id) {
+      // 确认事情
+      this.$confirm('确认要删除该文章么?', '删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // axios请求服务器端实现删除
+        let pro = this.$http({
+          url: '/mp/v1_0/articles/' + id,
+          method: 'delete'
+        })
+        pro
+          .then(result => {
+            // 删除成功
+            // console.log(result)  // 返回空的data数据
+            // 直接页面刷新即可
+            this.getArticleList()
+          })
+          .catch(err => {
+            return this.$message.error('删除文章失败：' + err)
+          })
+      }).catch(() => {
+      })
+    },
+
     // 分页相关
     // 每条条数变化的回调处理
     handleSizeChange (val) {
@@ -204,23 +241,8 @@ export default {
         .catch(err => {
           return this.$message.error('获得文章失败：' + err)
         })
-    },
-    // 获得真实频道列表数据
-    getChannelList () {
-      let pro = this.$http({
-        url: '/mp/v1_0/channels',
-        method: 'get'
-      })
-      pro
-        .then(result => {
-          // console.log(result)
-          // data接收频道数据
-          this.channelList = result.data.data.channels
-        })
-        .catch(err => {
-          return this.$message.error('获得频道失败：' + err)
-        })
     }
+
   }
 }
 </script>
@@ -231,7 +253,9 @@ export default {
   margin-bottom: 15px;
 }
 /*分页组件样式*/
-.el-pagination{margin-top:15px;}
+.el-pagination {
+  margin-top: 15px;
+}
 div{background-color:rgba(255, 255, 255,0.2);}
 .box-card{background-color:rgba(255, 255, 255,0.2);}
 .el-table{background-color:rgba(255, 255, 255,0.2);}

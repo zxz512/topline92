@@ -61,7 +61,7 @@ export default {
     return {
       // 表单数据对象
       loginForm: {
-        mobile: '13911111111', // 手机号码
+        mobile: '17732550596', // 手机号码
         code: '246810', // 验证码
         xieyi: true // 协议复选框
       },

@@ -11,18 +11,22 @@
           <i class="el-icon-menu"></i>
           <span>内容管理</span>
         </template>
-        <el-menu-item index="3">发布文章</el-menu-item>
+        <el-menu-item index="/articleadd">发布文章</el-menu-item>
         <el-menu-item index="/article">文章列表</el-menu-item>
         <el-menu-item index="5">评论列表</el-menu-item>
         <el-menu-item index="6">素材管理</el-menu-item>
       </el-submenu>
       <el-menu-item index="7" :style="{width:isCollapse?'65px':'200px'}">
-        <i class="el-icon-location"></i>
+        <i class="el-icon-document"></i>
         <span slot="title">粉丝管理</span>
       </el-menu-item>
-      <el-menu-item index="8" :style="{width:isCollapse?'65px':'200px'}">
-        <i class="el-icon-location"></i>
+      <el-menu-item index="/account" :style="{width:isCollapse?'65px':'200px'}">
+        <i class="el-icon-setting"></i>
         <span slot="title">账户管理</span>
+      </el-menu-item>
+       <el-menu-item index="/date" :style="{width:isCollapse?'65px':'200px'}">
+        <i class="el-icon-date"></i>
+        <span slot="title">当前日期显示</span>
       </el-menu-item>
 
     </el-menu>
@@ -113,11 +117,9 @@ export default {
   background-size:cover;
 background-position:center center;
   height: 100%;
-
   .el-menu{
      background:rgba(231, 231, 231, 0.3)
   }
-
   .el-aside {
  background:rgba(231, 231, 231, 0.3)
   }
@@ -156,5 +158,4 @@ background-position:center center;
   .el-main{
     // background-color:rgb(255, 255, 255,0.2);
   }
-
 </style>
