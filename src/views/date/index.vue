@@ -1,10 +1,8 @@
 <template>
-
-  <el-calendar v-model="value" >
+ <el-calendar v-model="value">
 </el-calendar>
 
 </template>
-
 <script>
 export default {
   data () {
@@ -14,6 +12,6 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style>
 
 </style>

@@ -8,6 +8,8 @@ import Articleadd from '@/views/articleadd'
 import Articleedit from '@/views/articleedit'
 import Account from '@/views/account'
 import Date from '@/views/date'
+import Photo from '@/views/photo'
+import Material from '@/views/material'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -15,11 +17,7 @@ const routes = [{
   name: 'login',
   component: Login
 },
-{
-  path: '/date',
-  name: 'date',
-  component: Date
-},
+
 { path: '/home',
   name: 'home',
   component: Home,
@@ -32,7 +30,11 @@ const routes = [{
     // 修改文章，路由地址要传递参数，体现出被修改文章id，名称为aid
     { path: '/articleedit/:aid', name: 'articleedit', component: Articleedit },
     // 账户管理
-    { path: '/account', name: 'account', component: Account }
+    { path: '/account', name: 'account', component: Account },
+    // 素材管理
+    { path: '/material', name: 'material', component: Material },
+    { path: '/photo', name: 'photo', component: Photo },
+    { path: '/date', name: 'date', component: Date }
   ]
 },
 {
