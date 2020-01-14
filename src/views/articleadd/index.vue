@@ -20,9 +20,11 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
         <ul>
-          <li class="uploadbox" v-for="item in covernum" :key="item" @click="showDialog()">
+          <!-- 把item序号信息当做参数传递给showDialog,可以获得到的信息分别为 1 2 3 -->
+          <li class="uploadbox" v-for="item in covernum" :key="item" @click="showDialog(item)">
             <span>点击图标选择图片</span>
-            <div class="el-icon-picture-outline"></div>
+            <img v-if="addForm.cover.images[item-1]" :src="addForm.cover.images[item-1]" alt="">
+            <div v-else class="el-icon-picture-outline"></div>
           </li>
         </ul>
       </el-form-item>
@@ -35,7 +37,9 @@
         <el-button @click="addarticle(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="60%">
+
+    <!-- @close是对话框的关闭事件，任何条件关闭对话框，都会执行该事件 -->
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="60%" @close="clearImage">
       <!-- 标签切换效果 -->
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="素材库" name="first">
@@ -53,7 +57,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="imageOK">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -104,6 +108,8 @@ export default {
   },
   data () {
     return {
+      materialUrl: '', // 记录选中的素材图片url地址的(临时接收)
+      xu: 0, // 记录选择框序号 0第一个   1第二个   2第三个
       activeName: 'first', // 默认激活标签
       // 获得素材图片的条件
       querycdt: {
@@ -146,6 +152,30 @@ export default {
     this.getImageList()
   },
   methods: {
+    // 给选中的图片做初始化清除工作
+    clearImage () {
+      // 选中图片的高亮 边框清除
+      let lis = document.querySelectorAll('.image-box')
+      for (var i = 0; i < lis.length; i++) {
+        lis[i].style.border = ''
+      }
+      // 选中图片的materialUrl地址清除
+      this.materialUrl = ''
+    },
+
+    // 确定选择当前图片了
+    imageOK () {
+      // 判断是否选中图片
+      if (this.materialUrl) {
+        // 把选择好的图片的地址赋予给 addForm.cover.images里边
+        // materialUrl------->addForm.cover.images['url','url','url']
+        this.addForm.cover.images[this.xu] = this.materialUrl
+        // 关闭对话框
+        this.dialogVisible = false
+      } else {
+        this.$message.error('没有想要的照片吗？')
+      }
+    },
     // 素材图片被单击选中
     clkImage (evt) {
       // evt:事件对象
@@ -163,6 +193,8 @@ export default {
       // 当前选中项目的border给设置好
       let nowli = evt.target.parentNode
       nowli.style.border = '7px solid orange'
+      // 把选中图片的url地址赋予给materialUrl成员
+      this.materialUrl = evt.target.src
     },
 
     // 获得图片列表
@@ -184,7 +216,8 @@ export default {
     },
 
     // 显示对话框
-    showDialog () {
+    showDialog (n) {
+      this.xu = n - 1 // 选择框序号是从0开始的，要减一操作
       this.dialogVisible = true
     },
 
