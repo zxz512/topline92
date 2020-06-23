@@ -3,7 +3,7 @@
     <div slot="header" class="clearfix">
       <span>粉丝统计</span>
     </div>
-    <div id="main" ref="main2" style="width: 600px;height:400px;"></div>
+    <div id="main" ref="main2" style="width: 600px;height:600px;"></div>
   </el-card>
 </template>
 
@@ -48,7 +48,7 @@ export default {
           {
             name: '访问来源',
             type: 'pie',
-            radius: '55%',
+            radius: '65%',
             center: ['50%', '60%'],
             emphasis: {
               itemStyle: {
